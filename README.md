@@ -11,11 +11,7 @@ npm install react-native-android-sms-verification
 ## Usage
 
 ```js
-import AndroidSmsVerification from "react-native-android-sms-verification";
-
-// ...
-
-const result = await AndroidSmsVerification.multiply(3, 7);
+// work in progress
 ```
 
 ## Contributing
