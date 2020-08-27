@@ -166,6 +166,7 @@ workflows:
             - lint
             - typescript
             - unit-tests
+            - build-package
           filters:
             tags:
               only: /.*/
