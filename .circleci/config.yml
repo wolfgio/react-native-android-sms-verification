@@ -93,18 +93,59 @@ jobs:
           command: npm publish
 
 workflows:
-  test-build-and-deploy:
+  run-test-and-linter:
     jobs:
       - install-dependencies
       - lint:
           requires:
             - install-dependencies
+          filters:
+            branches:
+              only: master
       - typescript:
           requires:
             - install-dependencies
+          filters:
+            branches:
+              only: master
       - unit-tests:
           requires:
             - install-dependencies
+          filters:
+            branches:
+              only: master
+  test-build-and-deploy:
+    jobs:
+      - install-dependencies:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - lint:
+          requires:
+            - install-dependencies
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - typescript:
+          requires:
+            - install-dependencies
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - unit-tests:
+          requires:
+            - install-dependencies
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
       - build-package:
           requires:
             - install-dependencies
