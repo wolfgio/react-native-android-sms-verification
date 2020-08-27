@@ -19,14 +19,18 @@ export const useBroadcastReceiver = () => {
           setMessage(event);
         }
       );
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }, [AndroidSmsVerification]);
 
   const stopListener = useCallback((): void => {
     try {
       AndroidSmsVerification.unRegisterBroadcastReceiver();
       listenerRef.current?.remove();
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }, [AndroidSmsVerification]);
 
   return { message, starListener, stopListener };
