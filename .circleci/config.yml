@@ -114,12 +114,16 @@ workflows:
             branches:
               ignore: /.*/
       - build-package:
+          requires:
+            - install-dependencies
           filters:
             tags:
               only: /.*/
             branches:
               ignore: /.*/
       - deploy:
+          requires:
+            - install-dependencies
           filters:
             tags:
               only: /.*/
