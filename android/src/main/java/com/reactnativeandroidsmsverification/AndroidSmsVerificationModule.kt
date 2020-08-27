@@ -3,7 +3,6 @@ package com.reactnativeandroidsmsverification
 import android.content.IntentFilter
 import android.util.Log
 import com.facebook.react.bridge.*
-import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 
@@ -27,15 +26,6 @@ class AndroidSmsVerificationModule : ReactContextBaseJavaModule, LifecycleEventL
       return "AndroidSmsVerification"
   }
 
-  // Example method
-  // See https://facebook.github.io/react-native/docs/native-modules-android
-  @ReactMethod
-  fun multiply(a: Int, b: Int, promise: Promise) {
-    reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-      .emit("onMessageReceived", "me mama")
-    promise.resolve(a * b)
-  }
-
   @ReactMethod
   fun registerBroadcastReceiver() {
     this.registerReceiver()
@@ -51,7 +41,7 @@ class AndroidSmsVerificationModule : ReactContextBaseJavaModule, LifecycleEventL
     if (isReceiverRegistered) {
       try {
         val task = client.startSmsRetriever();
-        
+
         task.addOnSuccessListener {
           Log.d(this.name, "Listener started!")
         }
@@ -60,10 +50,10 @@ class AndroidSmsVerificationModule : ReactContextBaseJavaModule, LifecycleEventL
           exception -> exception.printStackTrace()
         }
       } catch (e: Exception) {
-        e.printStackTrace()
+        throw Exception("Failed to start listener: ${e.message}", e)
       }
     } else {
-      throw error("Please register the broadcast receiver!")
+      throw Exception("Please register the receiver before starting it")
     }
   }
 
@@ -75,7 +65,7 @@ class AndroidSmsVerificationModule : ReactContextBaseJavaModule, LifecycleEventL
       Log.d(this.name, "Receiver registered!")
       isReceiverRegistered = true
     } catch (e: Exception) {
-      e.printStackTrace()
+      throw Exception("Failed to register the receiver: ${e.message}", e)
     }
   }
 
@@ -88,7 +78,7 @@ class AndroidSmsVerificationModule : ReactContextBaseJavaModule, LifecycleEventL
       Log.d(this.name, "Receiver unRegistered!")
       isReceiverRegistered = false
     } catch (e: Exception) {
-      e.printStackTrace()
+      throw Exception("Failed to unRegister the receiver: ${e.message}", e)
     }
   }
 

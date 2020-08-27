@@ -9,6 +9,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEm
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import java.util.concurrent.TimeoutException
 
 
 class AndroidSmsVerificationReceiver(private val reactContext: ReactApplicationContext) : BroadcastReceiver() {
@@ -26,7 +27,7 @@ class AndroidSmsVerificationReceiver(private val reactContext: ReactApplicationC
           }
 
           CommonStatusCodes.TIMEOUT -> {
-            // TODO handle timeout error
+            throw TimeoutException("Receiver timeout")
           }
         }
       }

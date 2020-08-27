@@ -1,25 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { NativeModules, NativeEventEmitter } from 'react-native';
-
-type AndroidSmsVerificationType = {
-  multiply(a: number, b: number): Promise<number>;
-};
-
-const { AndroidSmsVerification } = NativeModules;
+import type { EmitterSubscription } from 'react-native';
 
 export const useBroadcastReceiver = () => {
+  const { AndroidSmsVerification } = NativeModules;
   const [message, setMessage] = useState('');
+  const listenerRef = useRef<EmitterSubscription>();
 
-  useEffect(() => {
-    const eventEmitter = new NativeEventEmitter(AndroidSmsVerification);
-    const listener = eventEmitter.addListener('onMessageReceived', (event) => {
-      setMessage(event);
-    });
+  const starListener = useCallback((): void => {
+    try {
+      AndroidSmsVerification.registerBroadcastReceiver();
+      AndroidSmsVerification.startBroadcastReceiver();
 
-    return () => listener.remove();
-  }, []);
+      const eventEmitter = new NativeEventEmitter(AndroidSmsVerification);
+      listenerRef.current = eventEmitter.addListener(
+        'onMessageReceived',
+        (event) => {
+          setMessage(event);
+        }
+      );
+    } catch (error) {}
+  }, [AndroidSmsVerification]);
 
-  return { message };
+  const stopListener = useCallback((): void => {
+    try {
+      AndroidSmsVerification.unRegisterBroadcastReceiver();
+      listenerRef.current?.remove();
+    } catch (error) {}
+  }, [AndroidSmsVerification]);
+
+  return { message, starListener, stopListener };
 };
-
-export default AndroidSmsVerification as AndroidSmsVerificationType;
