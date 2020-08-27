@@ -1,6 +1,8 @@
 # react-native-android-sms-verification
 
-rn abstraction of Android Verification API
+rn abstraction of Android SMS Verification API
+
+https://developers.google.com/identity/sms-retriever/overview
 
 ## Installation
 
