@@ -107,13 +107,21 @@ workflows:
             - install-dependencies
   build-and-deploy:
     jobs:
-      - install-dependencies
+      - install-dependencies:
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*$/
+            branches:
+              ignore: /.*/
       - build-package:
-          requires:
-            - install-dependencies
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*$/
+            branches:
+              ignore: /.*/
       - deploy:
           filters:
             tags:
-              only: /^v.*/
+              only: /^v[0-9]+(\.[0-9]+)*$/
             branches:
               ignore: /.*/
