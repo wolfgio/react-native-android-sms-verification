@@ -93,6 +93,7 @@ jobs:
           command: npm publish
 
 workflows:
+  version: 2
   run-test-and-linter:
     jobs:
       - install-dependencies
