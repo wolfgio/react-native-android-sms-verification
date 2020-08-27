@@ -84,10 +84,10 @@ jobs:
     executor: default
     steps:
       - attach_workspace:
-          at: ~/repo
+          at: ~/project
       - run:
           name: Authenticate with registry
-          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/project/.npmrc
       - run:
           name: Publish package
           command: npm publish
@@ -133,6 +133,7 @@ workflows:
       - typescript:
           requires:
             - install-dependencies
+            - lint
           filters:
             tags:
               only: /.*/
@@ -141,6 +142,8 @@ workflows:
       - unit-tests:
           requires:
             - install-dependencies
+            - lint
+            - typescript
           filters:
             tags:
               only: /.*/
@@ -149,6 +152,9 @@ workflows:
       - build-package:
           requires:
             - install-dependencies
+            - lint
+            - typescript
+            - unit-tests
           filters:
             tags:
               only: /.*/
@@ -157,6 +163,9 @@ workflows:
       - deploy:
           requires:
             - install-dependencies
+            - lint
+            - typescript
+            - unit-tests
           filters:
             tags:
               only: /.*/
