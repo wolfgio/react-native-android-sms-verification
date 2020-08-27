@@ -79,9 +79,21 @@ jobs:
           name: Build package
           command: |
             yarn prepare
+  
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+      - run:
+          name: Publish package
+          command: npm publish
 
 workflows:
-  build-and-test:
+  test:
     jobs:
       - install-dependencies
       - lint:
@@ -93,6 +105,15 @@ workflows:
       - unit-tests:
           requires:
             - install-dependencies
+  build-and-deploy:
+    jobs:
+      - install-dependencies
       - build-package:
           requires:
             - install-dependencies
+      - deploy:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
