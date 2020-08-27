@@ -93,7 +93,6 @@ jobs:
           command: npm publish
 
 workflows:
-  version: 2
   run-test-and-linter:
     jobs:
       - install-dependencies
@@ -111,18 +110,18 @@ workflows:
       - install-dependencies:
           filters:
             tags:
-              only: /^v*/
+              only: /.*/
             branches:
               ignore: /.*/
       - build-package:
           filters:
             tags:
-              only: /^v*/
+              only: /.*/
             branches:
               ignore: /.*/
       - deploy:
           filters:
             tags:
-              only: /^v*/
+              only: /.*/
             branches:
               ignore: /.*/
