@@ -93,7 +93,7 @@ jobs:
           command: npm publish
 
 workflows:
-  run-test-and-linter:
+  test-build-and-deploy:
     jobs:
       - install-dependencies
       - lint:
@@ -105,14 +105,6 @@ workflows:
       - unit-tests:
           requires:
             - install-dependencies
-  build-and-deploy:
-    jobs:
-      - install-dependencies:
-          filters:
-            tags:
-              only: /.*/
-            branches:
-              ignore: /.*/
       - build-package:
           requires:
             - install-dependencies
