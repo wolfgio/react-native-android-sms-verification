@@ -110,18 +110,18 @@ workflows:
       - install-dependencies:
           filters:
             tags:
-              only: /^v[0-9]+(\.[0-9]+)*$/
+              only: /^v*/
             branches:
               ignore: /.*/
       - build-package:
           filters:
             tags:
-              only: /^v[0-9]+(\.[0-9]+)*$/
+              only: /^v*/
             branches:
               ignore: /.*/
       - deploy:
           filters:
             tags:
-              only: /^v[0-9]+(\.[0-9]+)*$/
+              only: /^v*/
             branches:
               ignore: /.*/
