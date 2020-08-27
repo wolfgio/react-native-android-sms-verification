@@ -79,9 +79,9 @@ jobs:
           name: Build package
           command: |
             yarn prepare
-  
+
   deploy:
-    <<: *defaults
+    executor: default
     steps:
       - attach_workspace:
           at: ~/repo
