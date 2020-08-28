@@ -83,8 +83,7 @@ jobs:
   deploy:
     executor: default
     steps:
-      - attach_workspace:
-          at: ~/project
+      - attach_project
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/project/.npmrc
