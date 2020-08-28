@@ -7,14 +7,19 @@ export default function App() {
   const [code, setCode] = React.useState('');
 
   React.useEffect(() => {
-    setCode(message);
+    const result = message.match('(\\d{6})');
+
+    if (result) {
+      setCode(result[0]);
+    }
   }, [message]);
 
   React.useEffect(() => {
     starListener();
 
     return () => stopListener();
-  }, [starListener, stopListener]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <View style={styles.container}>

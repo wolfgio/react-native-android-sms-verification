@@ -3,6 +3,7 @@ package com.reactnativeandroidsmsverification
 import android.content.IntentFilter
 import android.util.Log
 import com.facebook.react.bridge.*
+import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 
@@ -44,6 +45,8 @@ class AndroidSmsVerificationModule : ReactContextBaseJavaModule, LifecycleEventL
 
         task.addOnSuccessListener {
           Log.d(this.name, "Listener started!")
+          reactContext.getJSModule(RCTDeviceEventEmitter::class.java)
+            .emit("onListenerStarted", "Listener started!")
         }
 
         task.addOnFailureListener {
@@ -63,6 +66,8 @@ class AndroidSmsVerificationModule : ReactContextBaseJavaModule, LifecycleEventL
     try {
       currentActivity!!.registerReceiver(this.receiver, IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION))
       Log.d(this.name, "Receiver registered!")
+      reactContext.getJSModule(RCTDeviceEventEmitter::class.java)
+        .emit("onReceiverRegistered", "Broadcast Receiver registered!")
       isReceiverRegistered = true
     } catch (e: Exception) {
       throw Exception("Failed to register the receiver: ${e.message}", e)
@@ -76,6 +81,8 @@ class AndroidSmsVerificationModule : ReactContextBaseJavaModule, LifecycleEventL
     try {
       currentActivity!!.unregisterReceiver(this.receiver)
       Log.d(this.name, "Receiver unRegistered!")
+      reactContext.getJSModule(RCTDeviceEventEmitter::class.java)
+        .emit("onReceiverUnregistered", "Broadcast Receiver unregistered!")
       isReceiverRegistered = false
     } catch (e: Exception) {
       throw Exception("Failed to unRegister the receiver: ${e.message}", e)
