@@ -13,9 +13,9 @@ npm install react-native-android-sms-verification
 ## Usage
 
 ```js
-import { useBroadcastReceiver } from 'react-native-android-sms-verification';
+import { useSmsRetriver } from 'react-native-android-sms-verification';
 
-const { message, starListener, stopListener } = useBroadcastReceiver();
+const { message, startListener, stopListener } = useSmsRetriver();
 ```
 
 ## Contributing

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
-import { useBroadcastReceiver } from 'react-native-android-sms-verification';
+import { useSmsRetriver } from 'react-native-android-sms-verification';
 
 export default function App() {
-  const { message, starListener, stopListener } = useBroadcastReceiver();
+  const { message, startListener, stopListener } = useSmsRetriver();
   const [code, setCode] = React.useState('');
 
   React.useEffect(() => {
@@ -15,7 +15,7 @@ export default function App() {
   }, [message]);
 
   React.useEffect(() => {
-    starListener();
+    startListener();
 
     return () => stopListener();
     // eslint-disable-next-line react-hooks/exhaustive-deps
