@@ -1,6 +1,6 @@
 {
   "name": "react-native-android-sms-verification",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "rn abstraction of Android Verification API",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
