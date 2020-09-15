@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
-import { NativeModules, NativeEventEmitter } from 'react-native';
+import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
 import type { EmitterSubscription } from 'react-native';
 
 export default () => {
@@ -12,45 +12,53 @@ export default () => {
   );
 
   useEffect(() => {
-    const onStartListener = eventEmitter.addListener(
-      'onListenerStarted',
-      (event) => console.info(event)
-    );
-    const onRegisterListener = eventEmitter.addListener(
-      'onReceiverRegistered',
-      (event) => console.info(event)
-    );
-    const onUnregisterListener = eventEmitter.addListener(
-      'onReceiverUnregistered',
-      (event) => console.info(event)
-    );
+    if (Platform.OS === 'android') {
+      const onStartListener = eventEmitter.addListener(
+        'onListenerStarted',
+        (event) => console.info(event)
+      );
+      const onRegisterListener = eventEmitter.addListener(
+        'onReceiverRegistered',
+        (event) => console.info(event)
+      );
+      const onUnregisterListener = eventEmitter.addListener(
+        'onReceiverUnregistered',
+        (event) => console.info(event)
+      );
 
-    return () => {
-      onStartListener?.remove();
-      onRegisterListener?.remove();
-      onUnregisterListener?.remove();
-    };
+      return () => {
+        onStartListener?.remove();
+        onRegisterListener?.remove();
+        onUnregisterListener?.remove();
+      };
+    }
+
+    return () => null;
   }, [eventEmitter]);
 
   const startListener = useCallback((): void => {
-    try {
-      AndroidSmsVerification.registerBroadcastReceiver();
-      AndroidSmsVerification.startBroadcastReceiver();
-      listenerRef.current = eventEmitter.addListener(
-        'onMessageReceived',
-        setMessage
-      );
-    } catch (error) {
-      console.error(error);
+    if (Platform.OS === 'android') {
+      try {
+        AndroidSmsVerification.registerBroadcastReceiver();
+        AndroidSmsVerification.startBroadcastReceiver();
+        listenerRef.current = eventEmitter.addListener(
+          'onMessageReceived',
+          setMessage
+        );
+      } catch (error) {
+        console.error(error);
+      }
     }
   }, [AndroidSmsVerification, eventEmitter]);
 
   const stopListener = useCallback((): void => {
-    try {
-      AndroidSmsVerification.unRegisterBroadcastReceiver();
-      listenerRef.current?.remove();
-    } catch (error) {
-      console.error(error);
+    if (Platform.OS === 'android') {
+      try {
+        AndroidSmsVerification.unRegisterBroadcastReceiver();
+        listenerRef.current?.remove();
+      } catch (error) {
+        console.error(error);
+      }
     }
   }, [AndroidSmsVerification]);
 
