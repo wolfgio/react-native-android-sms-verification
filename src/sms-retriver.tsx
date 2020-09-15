@@ -3,7 +3,8 @@ import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
 import type { EmitterSubscription } from 'react-native';
 
 export default () => {
-  const { AndroidSmsVerification } = NativeModules;
+  const AndroidSmsVerification =
+    Platform.OS === 'android' ? NativeModules.AndroidSmsVerification : null;
   const [message, setMessage] = useState('');
   const listenerRef = useRef<EmitterSubscription>();
   const eventEmitter = useMemo(
