@@ -4,6 +4,7 @@ import type { EmitterSubscription } from 'react-native';
 
 interface UseSmsRetriver {
   message: string;
+  timeout: boolean;
   startListener: () => void;
   stopListener: () => void;
 }
@@ -11,6 +12,7 @@ interface UseSmsRetriver {
 const useSmsRetriver = (): UseSmsRetriver => {
   const { AndroidSmsVerification } = NativeModules;
   const [message, setMessage] = useState('');
+  const [timeout, setTimeout] = useState(false);
   const listenerRef = useRef<EmitterSubscription>();
   const eventEmitter = useMemo(
     () => new NativeEventEmitter(AndroidSmsVerification),
@@ -30,11 +32,16 @@ const useSmsRetriver = (): UseSmsRetriver => {
       'onReceiverUnregistered',
       (event) => console.info(event)
     );
+    const onReceiverTimeout = eventEmitter.addListener(
+      'onReceiverTimeout',
+      () => setTimeout(true)
+    );
 
     return () => {
       onStartListener?.remove();
       onRegisterListener?.remove();
       onUnregisterListener?.remove();
+      onReceiverTimeout?.remove();
     };
   }, [eventEmitter]);
 
@@ -62,7 +69,7 @@ const useSmsRetriver = (): UseSmsRetriver => {
     }
   }, [AndroidSmsVerification]);
 
-  return { message, startListener, stopListener };
+  return { message, timeout, startListener, stopListener };
 };
 
 export default Platform.OS === 'android'
@@ -70,6 +77,7 @@ export default Platform.OS === 'android'
   : () =>
       ({
         message: '',
+        timeout: false,
         startListener: () => {},
         stopListener: () => {},
       } as UseSmsRetriver);

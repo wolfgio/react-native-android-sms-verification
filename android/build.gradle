@@ -32,10 +32,10 @@ android {
     minSdkVersion 16
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
     versionCode 1
-    versionName "2.0.0"
-    
+    versionName "2.0.5"
+
   }
-  
+
   buildTypes {
     release {
       minifyEnabled false

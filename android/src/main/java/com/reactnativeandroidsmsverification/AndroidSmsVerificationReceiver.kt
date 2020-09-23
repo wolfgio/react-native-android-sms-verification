@@ -27,7 +27,8 @@ class AndroidSmsVerificationReceiver(private val reactContext: ReactApplicationC
           }
 
           CommonStatusCodes.TIMEOUT -> {
-            throw TimeoutException("Receiver timeout")
+            reactContext.getJSModule(RCTDeviceEventEmitter::class.java)
+              .emit("onReceiverTimeout", "Receiver timeout")
           }
         }
       }
