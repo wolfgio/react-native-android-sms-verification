@@ -12,7 +12,7 @@ interface UseSmsRetriver {
 const useSmsRetriver = (): UseSmsRetriver => {
   const { AndroidSmsVerification } = NativeModules;
   const [message, setMessage] = useState('');
-  const [timeout, setTimeout] = useState(false);
+  const [timeout, setTimeoutState] = useState(false);
   const listenerRef = useRef<EmitterSubscription>();
   const eventEmitter = useMemo(
     () => new NativeEventEmitter(AndroidSmsVerification),
@@ -34,7 +34,7 @@ const useSmsRetriver = (): UseSmsRetriver => {
     );
     const onReceiverTimeout = eventEmitter.addListener(
       'onReceiverTimeout',
-      () => setTimeout(true)
+      () => setTimeoutState(true)
     );
 
     return () => {
@@ -49,7 +49,7 @@ const useSmsRetriver = (): UseSmsRetriver => {
     try {
       AndroidSmsVerification.registerBroadcastReceiver();
       AndroidSmsVerification.startBroadcastReceiver();
-      setTimeout(false);
+      setTimeoutState(false);
       listenerRef.current = eventEmitter.addListener(
         'onMessageReceived',
         setMessage
