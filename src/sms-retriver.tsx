@@ -49,6 +49,7 @@ const useSmsRetriver = (): UseSmsRetriver => {
     try {
       AndroidSmsVerification.registerBroadcastReceiver();
       AndroidSmsVerification.startBroadcastReceiver();
+      setTimeout(false);
       listenerRef.current = eventEmitter.addListener(
         'onMessageReceived',
         setMessage
