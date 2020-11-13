@@ -8,17 +8,15 @@ import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 
 
-class AndroidSmsVerificationModule : ReactContextBaseJavaModule, LifecycleEventListener {
+class AndroidSmsVerificationModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext), LifecycleEventListener {
   private val receiver: AndroidSmsVerificationReceiver?
-  private val reactContext: ReactApplicationContext
   private val client: SmsRetrieverClient
   private var isReceiverRegistered: Boolean
 
 
-  constructor(reactContext: ReactApplicationContext) : super(reactContext) {
+  init {
     this.receiver = AndroidSmsVerificationReceiver(reactContext)
     this.isReceiverRegistered = false
-    this.reactContext = reactContext
     this.client = SmsRetriever.getClient(reactContext)
     reactContext.addLifecycleEventListener(this)
   }

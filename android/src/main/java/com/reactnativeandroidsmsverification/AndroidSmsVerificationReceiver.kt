@@ -16,8 +16,8 @@ class AndroidSmsVerificationReceiver(private val reactContext: ReactApplicationC
 
   override fun onReceive(p0: Context?, intent: Intent?) {
     if (intent != null && SmsRetriever.SMS_RETRIEVED_ACTION == intent.action) {
-        val extras: Bundle = intent.extras
-        val status: Status = extras[SmsRetriever.EXTRA_STATUS] as Status
+        val extras: Bundle? = intent.extras
+        val status: Status = extras?.get(SmsRetriever.EXTRA_STATUS) as Status
         when (status.statusCode) {
           CommonStatusCodes.SUCCESS -> {
             val message = extras[SmsRetriever.EXTRA_SMS_MESSAGE] as String
