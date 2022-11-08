@@ -40,7 +40,7 @@
   },
   "homepage": "https://github.com/wolfgio/react-native-android-sms-verification#readme",
   "devDependencies": {
-    "@commitlint/config-conventional": "^11.0.0",
+    "@commitlint/config-conventional": "^17.2.0",
     "@react-native-community/bob": "^0.16.2",
     "@react-native-community/eslint-config": "^2.0.0",
     "@release-it/conventional-changelog": "^1.1.4",
